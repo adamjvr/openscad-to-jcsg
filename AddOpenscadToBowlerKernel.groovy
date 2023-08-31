@@ -23,7 +23,7 @@ ScriptingEngine.addScriptingLanguage(new IScriptingLanguage() {
 		data = new String(Files.readAllBytes(Paths.get(code.getAbsolutePath())));
 		String hash = data.hashCode();
 		String filename = code.getName().split("\\.")[0]
-		File cache = new File(code.getAbsolutePath()+"/"+filename+"-cache/")
+		File cache = new File(code.getParentFile().getAbsolutePath()+"/"+filename+"-cache/")
 		println cache.getAbsolutePath()
 		if(!cache.exists())
 			if(!cache.mkdir())
