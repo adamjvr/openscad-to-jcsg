@@ -51,8 +51,10 @@ ScriptingEngine.addScriptingLanguage(new IScriptingLanguage() {
 			w.write(groovyContents);
 			w.close();
 		}
-		
-		return ScriptingEngine.inlineScriptRun(groovy, args);;
+		println groovy
+		def ret= ScriptingEngine.inlineScriptRun(groovy, args,"Groovy");;
+		println ret.getClass()
+		return ret
 	}
 	
 	/**
