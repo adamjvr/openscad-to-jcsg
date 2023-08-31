@@ -26,17 +26,30 @@ ScriptingEngine.addScriptingLanguage(new IScriptingLanguage() {
 		File cache = new File(code.getAbsolutePath()+"/"+filename+"-cache/")
 		println cache.getAbsolutePath()
 		if(!cache.exists())
-			cache.mkdir()
-		File groovy = new File(cache.getAbsolutePath()+"/"+hash+".groovy")
-		if(!groovy.exists()){
-			groovy.createNewFile();
+			if(!cache.mkdir())
+				throw new RuntimeException("Failed to create the cache direcory")
+		File groovy = new File(cache.getAbsolutePath()+"/"+filename+".groovy")
+		File hashfile = new File(cache.getAbsolutePath()+"/hash.txt")
+		boolean matchingHash=false;
+		if(hashfile.exists()) {
+			String currentHash = new String(Files.readAllBytes(Paths.get(hashfile.getAbsolutePath())));
+			if(currentHash.contains(hash)) {
+				matchingHash=true;
+			}
+		}
+		BufferedWriter writer = new BufferedWriter(new FileWriter(hashfile.getAbsolutePath()));
+		writer.write(hash);
+		writer.close();
+		if(!matchingHash){
+			if(!groovy.exists())
+				groovy.createNewFile();
 			String groovyContents = "return new Cube(1).toCSG()"
 			
 			// generate real code here
 			
-			BufferedWriter writer = new BufferedWriter(new FileWriter(groovy.getAbsolutePath()));
-			writer.write(groovyContents);
-			writer.close();
+			BufferedWriter w = new BufferedWriter(new FileWriter(groovy.getAbsolutePath()));
+			w.write(groovyContents);
+			w.close();
 		}
 		
 		return ScriptingEngine.inlineScriptRun(groovy, args);;
