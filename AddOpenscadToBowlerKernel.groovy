@@ -37,6 +37,7 @@ ScriptingEngine.addScriptingLanguage(new IScriptingLanguage() {
 				matchingHash=true;
 			}
 		}
+		matchingHash=false;
 		BufferedWriter writer = new BufferedWriter(new FileWriter(hashfile.getAbsolutePath()));
 		writer.write(hash);
 		writer.close();
